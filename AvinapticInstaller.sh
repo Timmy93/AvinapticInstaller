@@ -6,6 +6,17 @@
 # Version:    1
 # Disclaimer:   It's just a try
 
+#Get desktop folder name
+if [ -r ~/.config/user-dirs.dirs ]
+then
+    . ~/.config/user-dirs.dirs
+fi
+if [ "$XDG_DESKTOP_DIR" = "" ]
+then
+    export XDG_DESKTOP_DIR=$HOME/Desktop
+fi
+#XDG_DESKTOP_DIR contains the name of the desktop
+
 #Create folders
 echo '###Creating folder###'
 sudo mkdir -p /usr/lib32/libgtk
@@ -64,8 +75,11 @@ sudo ln -s ~/bin/avinaptic /usr/local/bin
 #Download Icon
 sudo wget https://chakraos.org/ccr/packages/av/avinaptic2/avinaptic2/avinaptic2.png -O /opt/avinaptic/avinaptic_icon.png
 
-#Creo Shortcut
+#Create Shortcuts
 sudo printf '[Desktop Entry]\nEncoding=UTF-8\nVersion=1.0\nName=AVInaptic\nGenericName=Report\nExec=avinaptic\nTerminal=false\nIcon[en_US]=/opt/avinaptic/avinaptic_icon.png\nType=Application\nCategories=GTK;AudioVideo;\nComment[en_US]=A free utility which reports many technical informations about multimedia files\nComment[it]=Un programma che analizza file file multimediali e mostra informazioni sulle caratteristiche tecniche' > /usr/share/applications/Avinaptic.desktop
+sudo printf '[Desktop Entry]\nEncoding=UTF-8\nVersion=1.0\nName=AVInaptic\nGenericName=Report\nExec=avinaptic\nTerminal=false\nIcon[en_US]=/opt/avinaptic/avinaptic_icon.png\nType=Application\nCategories=GTK;AudioVideo;\nComment[en_US]=A free utility which reports many technical informations about multimedia files\nComment[it]=Un programma che analizza file file multimediali e mostra informazioni sulle caratteristiche tecniche' > $XDG_DESKTOP_DIR/Avinaptic.desktop
+
+
 #Applico tutte le modifiche
 sudo ldconfig
 echo '###All done###'
