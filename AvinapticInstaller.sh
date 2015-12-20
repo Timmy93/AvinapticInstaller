@@ -1,5 +1,10 @@
 #!/bin/bash
-#sudo -s
+# Purpose:   Install AVInaptic
+# Usage:    scriptname /path/to/file.sh
+# Author:    Timmy93
+# Date:    Sun Dec 19, 2015
+# Version:    1
+# Disclaimer:   It's just a try
 
 #Create folders
 echo '###Creating folder###'
@@ -9,22 +14,22 @@ sudo mkdir -p /opt/avinaptic
 mkdir ~/temp_avinaptic
 #Download libgtk
 echo '###Download libgtk###'
-wget -nv http://fsinapsi.altervista.org/code/avinaptic/libgtk.zip -O ~/temp_avinaptic/libgtk.zip
+wget http://fsinapsi.altervista.org/code/avinaptic/libgtk.zip -O ~/temp_avinaptic/libgtk.zip
 
 #Download libiconv
 echo '###Download libiconv###'
-sudo wget -nv http://fsinapsi.altervista.org/code/avinaptic/libiconv.zip -O ~/temp_avinaptic/libiconv.zip
+sudo wget http://fsinapsi.altervista.org/code/avinaptic/libiconv.zip -O ~/temp_avinaptic/libiconv.zip
 
 #Download libgmp
 echo '###Download libgmp###'
-sudo wget -nv http://fsinapsi.altervista.org/code/avinaptic/libgmp.zip -O ~/temp_avinaptic/libgmp.zip
+sudo wget http://fsinapsi.altervista.org/code/avinaptic/libgmp.zip -O ~/temp_avinaptic/libgmp.zip
 
 #Download libjpeg
-sudo wget -nv http://ftp.it.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg62_6b1-1_i386.deb -O ~/temp_avinaptic/libjpeg.deb
+sudo wget http://ftp.it.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg62_6b1-1_i386.deb -O ~/temp_avinaptic/libjpeg.deb
 
 #Download Avinaptic
 echo '###Download Avinaptic###'
-sudo wget -nv http://fsinapsi.altervista.org/code/avinaptic/avinaptic.zip -O ~/temp_avinaptic/avinaptic.zip
+sudo wget http://fsinapsi.altervista.org/code/avinaptic/avinaptic.zip -O ~/temp_avinaptic/avinaptic.zip
 
 #Decompress files
 echo '###Decompress all files###'
@@ -57,7 +62,7 @@ chmod +x ~/bin/avinaptic
 echo '###Create Hard Link###'
 sudo ln -s ~/bin/avinaptic /usr/local/bin
 #Download Icon
-sudo wget -nv https://chakraos.org/ccr/packages/av/avinaptic2/avinaptic2/avinaptic2.png -O /opt/avinaptic/avinaptic_icon.png
+sudo wget https://chakraos.org/ccr/packages/av/avinaptic2/avinaptic2/avinaptic2.png -O /opt/avinaptic/avinaptic_icon.png
 
 #Creo Shortcut
 sudo printf '[Desktop Entry]\nEncoding=UTF-8\nVersion=1.0\nName=AVInaptic\nGenericName=Report\nExec=avinaptic\nTerminal=false\nIcon[en_US]=/opt/avinaptic/avinaptic_icon.png\nType=Application\nCategories=GTK;AudioVideo;\nComment[en_US]=A free utility which reports many technical informations about multimedia files\nComment[it]=Un programma che analizza file file multimediali e mostra informazioni sulle caratteristiche tecniche' > /usr/share/applications/Avinaptic.desktop
