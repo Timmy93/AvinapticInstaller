@@ -26,7 +26,7 @@ export NAME="AVInaptic"
 #Auto-generated or fixed variables
 export TEMP_NAME=~/temp_$CMD
 export FOLDER_NAME=/opt/$CMD
-export ICON_SUFFIX=_icon.png
+export ICON_SUFFIX=.png
 export LIB_FOLDER="/usr/lib32"
 
 #Other info
@@ -50,21 +50,22 @@ sudo mkdir -p $LIB_FOLDER/libgmp
 #Download libraries
 #Download libgtk
 echo '###Download libgtk###'
-wget http://fsinapsi.altervista.org/code/avinaptic/libgtk.zip -O $TEMP_NAME/libgtk.zip
+wget -q http://fsinapsi.altervista.org/code/avinaptic/libgtk.zip -O $TEMP_NAME/libgtk.zip
 #Download libiconv
 echo '###Download libiconv###'
-sudo wget http://fsinapsi.altervista.org/code/avinaptic/libiconv.zip -O $TEMP_NAME/libiconv.zip
+sudo wget -q http://fsinapsi.altervista.org/code/avinaptic/libiconv.zip -O $TEMP_NAME/libiconv.zip
 #Download libgmp
 echo '###Download libgmp###'
-sudo wget http://fsinapsi.altervista.org/code/avinaptic/libgmp.zip -O $TEMP_NAME/libgmp.zip
+sudo wget -q http://fsinapsi.altervista.org/code/avinaptic/libgmp.zip -O $TEMP_NAME/libgmp.zip
 #Download libjpeg
-sudo wget http://ftp.it.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg62_6b1-1_i386.deb -O $TEMP_NAME/libjpeg.deb
+sudo wget -q http://ftp.it.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg62_6b1-1_i386.deb -O $TEMP_NAME/libjpeg.deb
 #Install libraries
 sudo unzip $TEMP_NAME/libgtk.zip -d /usr/lib32/libgtk/
 sudo unzip $TEMP_NAME/libiconv.zip -d /usr/lib32/
 sudo unzip $TEMP_NAME/libgmp.zip -d /usr/lib32/libgmp/
 sudo gdebi --n $TEMP_NAME/libjpeg.deb
 #Create config
+sudo rm -f /etc/ld.so.conf.d/avinaptic.conf
 sudo printf '/usr/lib32\n/usr/lib32/libgtk\n/usr/lib32/libgmp' > /etc/ld.so.conf.d/avinaptic.conf
 #Update libraries
 sudo ldconfig
@@ -72,17 +73,12 @@ echo '###Dependencies installed###'
 
 #Download Main Software
 echo '###Download Main Software###'
-wget "$LINK_SOFTWARE" -O "$TEMP_NAME/$CMD.zip"
+wget -q "$LINK_SOFTWARE" -O "$TEMP_NAME/$CMD.zip"
 
 #Start settings
 echo '###Setting up...###'
 #Move Software to his folder
 sudo unzip "$TEMP_NAME/$CMD.zip" -d "$FOLDER_NAME"
-sudo mv "$TEMP_NAME/$CMD.jar" "$FOLDER_NAME"
-
-#Create script
-echo '###Create Dir###'
-mkdir ~/bin
 
 echo '###Create script###'
 echo "#!/bin/bash
@@ -103,8 +99,8 @@ chmod +x ~/bin/$CMD
 echo '###Create Hard Link###'
 sudo ln -s ~/bin/$CMD /usr/local/bin
 #Download Icon
-wget -q $LINK_ICON -O $TEMP_NAME/$CMD$ICON_SUFFIX
-sudo mv $TEMP_NAME/$CMD$ICON_SUFFIX $FOLDER_NAME
+wget -q -q $LINK_ICON -O $TEMP_NAME/$CMD$ICON_SUFFIX
+sudo mv $TEMP_NAME/$CMD$ICON_SUFFIX /usr/share/pixmaps
 
 #Create Shortcuts
 shortcut="[Desktop Entry]
@@ -114,7 +110,7 @@ Name=$NAME
 GenericName=$GENERIC_NAME
 Exec=$CMD
 Terminal=false
-Icon=$FOLDER_NAME/$CMD$ICON_SUFFIX
+Icon=$CMD
 Type=Application
 Categories=$CATEG
 Comment=$EN_COM
@@ -125,6 +121,6 @@ sudo cp "$TEMP_NAME/$NAME.desktop" /usr/share/applications/
 cp "$TEMP_NAME/$NAME.desktop" "$XDG_DESKTOP_DIR/$NAME.desktop"
 
 #Remove useless files
-rm -rf "$TEMP_NAME"
+rm -rf -f "$TEMP_NAME"
 
 echo '###All done###'
