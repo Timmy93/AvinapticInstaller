@@ -73,7 +73,7 @@ echo '###Dependencies installed###'
 
 #Download Main Software
 echo '###Download Main Software###'
-wget -q "$LINK_SOFTWARE" -O "$TEMP_NAME/$CMD.zip"
+wget "$LINK_SOFTWARE" -O "$TEMP_NAME/$CMD.zip"
 
 #Start settings
 echo '###Setting up...###'
@@ -99,7 +99,7 @@ chmod +x ~/bin/$CMD
 echo '###Create Hard Link###'
 sudo ln -s ~/bin/$CMD /usr/local/bin
 #Download Icon
-wget -q -q $LINK_ICON -O $TEMP_NAME/$CMD$ICON_SUFFIX
+wget -q $LINK_ICON -O $TEMP_NAME/$CMD$ICON_SUFFIX
 sudo mv $TEMP_NAME/$CMD$ICON_SUFFIX /usr/share/pixmaps
 
 #Create Shortcuts
