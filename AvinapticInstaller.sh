@@ -1,10 +1,10 @@
 #!/bin/bash
-# Purpose:   Install AVInaptic
-# Usage:    scriptname /path/to/file.sh
-# Author:    Timmy93
-# Date:    Sun Dec 19, 2015
-# Version:    1
-# Disclaimer:   It's just a try
+# Purpose:	Install AVInaptic
+# Usage:	scriptname /path/to/file.sh
+# Author:	Timmy93
+# Date:		Sun Dec 19, 2015
+# Version:	1
+# Disclaimer:	It's just a try
 
 #Get desktop folder name
 if [ -r ~/.config/user-dirs.dirs ]
@@ -17,69 +17,114 @@ then
 fi
 #XDG_DESKTOP_DIR contains the name of the desktop
 
+#Variables
+#It's the command given to the shell to execute the program
+export CMD=avinaptic
+#It's the name of the program
+export NAME="AVInaptic"
+
+#Auto-generated or fixed variables
+export TEMP_NAME=~/temp_$CMD
+export FOLDER_NAME=/opt/$CMD
+export ICON_SUFFIX=_icon.png
+export LIB_FOLDER="/usr/lib32"
+
+#Other info
+export LINK_ICON="https://chakraos.org/ccr/packages/av/avinaptic2/avinaptic2/avinaptic2.png"
+export LINK_SOFTWARE="http://fsinapsi.altervista.org/code/avinaptic/avinaptic.zip"
+export GENERIC_NAME="Report Video"
+export CATEG="GTK;AudioVideo;"
+export EN_COM="A free utility which reports many technical informations about multimedia files."
+export IT_COM="Un programma che analizza file file multimediali e mostra informazioni sulle caratteristiche tecniche."
+
 #Create folders
 echo '###Creating folder###'
-sudo mkdir -p /usr/lib32/libgtk
-sudo mkdir -p /usr/lib32/libgmp
-sudo mkdir -p /opt/avinaptic
-mkdir ~/temp_avinaptic
+sudo mkdir -p $FOLDER_NAME
+mkdir $TEMP_NAME
+mkdir -p ~/bin
+
+#Satisfy dependency
+echo '###Installing dependencies###'
+sudo mkdir -p $LIB_FOLDER/libgtk
+sudo mkdir -p $LIB_FOLDER/libgmp
+#Download libraries
 #Download libgtk
 echo '###Download libgtk###'
-wget http://fsinapsi.altervista.org/code/avinaptic/libgtk.zip -O ~/temp_avinaptic/libgtk.zip
-
+wget http://fsinapsi.altervista.org/code/avinaptic/libgtk.zip -O $TEMP_NAME/libgtk.zip
 #Download libiconv
 echo '###Download libiconv###'
-sudo wget http://fsinapsi.altervista.org/code/avinaptic/libiconv.zip -O ~/temp_avinaptic/libiconv.zip
-
+sudo wget http://fsinapsi.altervista.org/code/avinaptic/libiconv.zip -O $TEMP_NAME/libiconv.zip
 #Download libgmp
 echo '###Download libgmp###'
-sudo wget http://fsinapsi.altervista.org/code/avinaptic/libgmp.zip -O ~/temp_avinaptic/libgmp.zip
-
+sudo wget http://fsinapsi.altervista.org/code/avinaptic/libgmp.zip -O $TEMP_NAME/libgmp.zip
 #Download libjpeg
-sudo wget http://ftp.it.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg62_6b1-1_i386.deb -O ~/temp_avinaptic/libjpeg.deb
+sudo wget http://ftp.it.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg62_6b1-1_i386.deb -O $TEMP_NAME/libjpeg.deb
+#Install libraries
+sudo unzip $TEMP_NAME/libgtk.zip -d /usr/lib32/libgtk/
+sudo unzip $TEMP_NAME/libiconv.zip -d /usr/lib32/
+sudo unzip $TEMP_NAME/libgmp.zip -d /usr/lib32/libgmp/
+sudo gdebi --n $TEMP_NAME/libjpeg.deb
+#Create config
+sudo printf '/usr/lib32\n/usr/lib32/libgtk\n/usr/lib32/libgmp' > /etc/ld.so.conf.d/avinaptic.conf
+#Update libraries
+sudo ldconfig
+echo '###Dependencies installed###'
 
-#Download Avinaptic
-echo '###Download Avinaptic###'
-sudo wget http://fsinapsi.altervista.org/code/avinaptic/avinaptic.zip -O ~/temp_avinaptic/avinaptic.zip
-
-#Decompress files
-echo '###Decompress all files###'
-sudo unzip ~/temp_avinaptic/libgtk.zip -d /usr/lib32/libgtk/
-sudo unzip ~/temp_avinaptic/libiconv.zip -d /usr/lib32/
-sudo unzip ~/temp_avinaptic/libgmp.zip -d /usr/lib32/libgmp/
-sudo unzip ~/temp_avinaptic/avinaptic.zip -d /opt/avinaptic
-sudo gdebi --n ~/temp_avinaptic/libjpeg.deb
-
-#Remove useless files
-echo '###Remove useless files###'
-#sudo rm /usr/lib32/libgtk/libgtk.zip
-#sudo rm /usr/lib32/libiconv.zip
-#sudo rm /usr/lib32/libgmp/libgmp.zip
-#sudo rm /opt/avinaptic/avinaptic.zip
+#Download Main Software
+echo '###Download Main Software###'
+wget "$LINK_SOFTWARE" -O "$TEMP_NAME/$CMD.zip"
 
 #Start settings
 echo '###Setting up...###'
-#Create config
-sudo printf '/usr/lib32\n/usr/lib32/libgtk\n/usr/lib32/libgmp' > /etc/ld.so.conf.d/avinaptic.conf
+#Move Software to his folder
+sudo unzip "$TEMP_NAME/$CMD.zip" -d "$FOLDER_NAME"
+sudo mv "$TEMP_NAME/$CMD.jar" "$FOLDER_NAME"
+
 #Create script
 echo '###Create Dir###'
 mkdir ~/bin
 
 echo '###Create script###'
-sudo printf '#!/bin/sh\n/opt/avinaptic/avinaptic' > ~/bin/avinaptic
+echo "#!/bin/bash
+# Purpose:	
+# Usage:	
+# Author:	Timmy93
+# Date:		
+# Version:	
+# Disclaimer:
+$FOLDER_NAME/$CMD" > $TEMP_NAME/$CMD
+sudo mv "$TEMP_NAME/$CMD" ~/bin/
+
 echo '###Make it executable###'
-chmod +x ~/bin/avinaptic
+chmod +x ~/bin/$CMD
+
+
 #Create Hard Link
 echo '###Create Hard Link###'
-sudo ln -s ~/bin/avinaptic /usr/local/bin
+sudo ln -s ~/bin/$CMD /usr/local/bin
 #Download Icon
-sudo wget https://chakraos.org/ccr/packages/av/avinaptic2/avinaptic2/avinaptic2.png -O /opt/avinaptic/avinaptic_icon.png
+wget -q $LINK_ICON -O $TEMP_NAME/$CMD$ICON_SUFFIX
+sudo mv $TEMP_NAME/$CMD$ICON_SUFFIX $FOLDER_NAME
 
 #Create Shortcuts
-sudo printf '[Desktop Entry]\nEncoding=UTF-8\nVersion=1.0\nName=AVInaptic\nGenericName=Report\nExec=avinaptic\nTerminal=false\nIcon[en_US]=/opt/avinaptic/avinaptic_icon.png\nType=Application\nCategories=GTK;AudioVideo;\nComment[en_US]=A free utility which reports many technical informations about multimedia files\nComment[it]=Un programma che analizza file file multimediali e mostra informazioni sulle caratteristiche tecniche' > /usr/share/applications/Avinaptic.desktop
-sudo printf '[Desktop Entry]\nEncoding=UTF-8\nVersion=1.0\nName=AVInaptic\nGenericName=Report\nExec=avinaptic\nTerminal=false\nIcon[en_US]=/opt/avinaptic/avinaptic_icon.png\nType=Application\nCategories=GTK;AudioVideo;\nComment[en_US]=A free utility which reports many technical informations about multimedia files\nComment[it]=Un programma che analizza file file multimediali e mostra informazioni sulle caratteristiche tecniche' > $XDG_DESKTOP_DIR/Avinaptic.desktop
+shortcut="[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=$NAME
+GenericName=$GENERIC_NAME
+Exec=$CMD
+Terminal=false
+Icon=$FOLDER_NAME/$CMD$ICON_SUFFIX
+Type=Application
+Categories=$CATEG
+Comment=$EN_COM
+Comment[it]=$IT_COM"
+echo "$shortcut" > "$TEMP_NAME/$NAME.desktop"
+chmod +x "$TEMP_NAME/$NAME.desktop"
+sudo cp "$TEMP_NAME/$NAME.desktop" /usr/share/applications/
+cp "$TEMP_NAME/$NAME.desktop" "$XDG_DESKTOP_DIR/$NAME.desktop"
 
+#Remove useless files
+rm -rf "$TEMP_NAME"
 
-#Applico tutte le modifiche
-sudo ldconfig
 echo '###All done###'
