@@ -88,7 +88,7 @@ echo "#!/bin/bash
 # Date:		
 # Version:	
 # Disclaimer:
-$FOLDER_NAME/$CMD" > $TEMP_NAME/$CMD
+$FOLDER_NAME/$CMD  \"\$1\"" > $TEMP_NAME/$CMD
 sudo mv "$TEMP_NAME/$CMD" ~/bin/
 
 echo '###Make it executable###'
@@ -108,7 +108,7 @@ Encoding=UTF-8
 Version=1.0
 Name=$NAME
 GenericName=$GENERIC_NAME
-Exec=$CMD
+Exec=$CMD %f
 Terminal=false
 Icon=$CMD
 Type=Application
