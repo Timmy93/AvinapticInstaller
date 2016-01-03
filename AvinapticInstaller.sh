@@ -88,7 +88,13 @@ echo "#!/bin/bash
 # Date:		
 # Version:	
 # Disclaimer:
-$FOLDER_NAME/$CMD  \"\$1\"" > $TEMP_NAME/$CMD
+
+if [ -z \"\$1\" ]
+then
+	$FOLDER_NAME/$CMD
+else
+	$FOLDER_NAME/$CMD  \"\$1\"
+fi" > $TEMP_NAME/$CMD
 sudo mv "$TEMP_NAME/$CMD" ~/bin/
 
 echo '###Make it executable###'
