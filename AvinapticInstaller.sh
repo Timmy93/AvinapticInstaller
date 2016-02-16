@@ -66,7 +66,10 @@ sudo unzip $TEMP_NAME/libgmp.zip -d /usr/lib32/libgmp/
 sudo gdebi --n $TEMP_NAME/libjpeg.deb
 #Create config
 sudo rm -f /etc/ld.so.conf.d/avinaptic.conf
-sudo printf '/usr/lib32\n/usr/lib32/libgtk\n/usr/lib32/libgmp' > /etc/ld.so.conf.d/avinaptic.conf
+echo "/usr/lib32
+/usr/lib32/libgtk
+/usr/lib32/libgmp" > "$TEMP_NAME/avinaptic.conf"
+sudo mv "$TEMP_NAME/avinaptic.conf" /etc/ld.so.conf.d/
 #Update libraries
 sudo ldconfig
 echo '###Dependencies installed###'
