@@ -30,7 +30,7 @@ export ICON_SUFFIX=.png
 export LIB_FOLDER="/usr/lib32"
 
 #Other info
-export LINK_ICON="https://chakraos.org/ccr/packages/av/avinaptic2/avinaptic2/avinaptic2.png"
+export LINK_ICON="http://i1-win.softpedia-static.com/screenshots/icon-60/AVInaptic.png"
 export LINK_SOFTWARE="http://fsinapsi.altervista.org/code/avinaptic/avinaptic.zip"
 export GENERIC_NAME="Report Video"
 export CATEG="GTK;AudioVideo;"
@@ -53,27 +53,37 @@ echo '###Download libgtk###'
 wget -q http://fsinapsi.altervista.org/code/avinaptic/libgtk.zip -O $TEMP_NAME/libgtk.zip
 #Download libiconv
 echo '###Download libiconv###'
-sudo wget -q http://fsinapsi.altervista.org/code/avinaptic/libiconv.zip -O $TEMP_NAME/libiconv.zip
+wget -q http://fsinapsi.altervista.org/code/avinaptic/libiconv.zip -O $TEMP_NAME/libiconv.zip
 #Download libgmp
 echo '###Download libgmp###'
-sudo wget -q http://fsinapsi.altervista.org/code/avinaptic/libgmp.zip -O $TEMP_NAME/libgmp.zip
+wget -q http://fsinapsi.altervista.org/code/avinaptic/libgmp.zip -O $TEMP_NAME/libgmp.zip
 #Download libjpeg
-sudo wget -q http://ftp.it.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg62_6b1-1_i386.deb -O $TEMP_NAME/libjpeg.deb
+#OLD
+#wget -q http://ftp.it.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg62_6b1-1_i386.deb -O $TEMP_NAME/#libjpeg.deb
+echo '###Download libjpeg62_6b1-1_i386###'
+#wget -q http://www.filewatcher.com/b/ftp/ftp.nl.debian.org/debian-archive/debian/pool/main/libj/libjpeg6b-0.html -O $TEMP_NAME/libjpeg.deb
+cp /home/timmy/Scrivania/MyDoc/Vario/Linux/AvinapticInstaller/libjpeg62_6b1-1_i386.deb $TEMP_NAME/libjpeg.deb
+
 #Install libraries
+echo '###Install libraries###'
 sudo unzip $TEMP_NAME/libgtk.zip -d /usr/lib32/libgtk/
 sudo unzip $TEMP_NAME/libiconv.zip -d /usr/lib32/
 sudo unzip $TEMP_NAME/libgmp.zip -d /usr/lib32/libgmp/
-sudo gdebi --n $TEMP_NAME/libjpeg.deb
+
+sudo gdebi -q $TEMP_NAME/libjpeg.deb
 #Create config
 sudo rm -f /etc/ld.so.conf.d/avinaptic.conf
-sudo printf '/usr/lib32\n/usr/lib32/libgtk\n/usr/lib32/libgmp' > /etc/ld.so.conf.d/avinaptic.conf
+echo "/usr/lib32
+/usr/lib32/libgtk
+/usr/lib32/libgmp" > "$TEMP_NAME/avinaptic.conf"
+sudo mv "$TEMP_NAME/avinaptic.conf" /etc/ld.so.conf.d/
 #Update libraries
 sudo ldconfig
 echo '###Dependencies installed###'
 
 #Download Main Software
 echo '###Download Main Software###'
-wget "$LINK_SOFTWARE" -O "$TEMP_NAME/$CMD.zip"
+wget -q "$LINK_SOFTWARE" -O "$TEMP_NAME/$CMD.zip"
 
 #Start settings
 echo '###Setting up...###'
